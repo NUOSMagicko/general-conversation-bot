@@ -1,10 +1,13 @@
 import os
-from dotenv import load_dotenv
-from openai import OpenAI
 import pyaudio
+import pygame
 import wave
 import keyboard
 import time
+from pathlib import Path
+from dotenv import load_dotenv
+from openai import OpenAI
+
 
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
@@ -77,3 +80,32 @@ def get_GPT305_Response(prompt):
 
 gpt_response_text = get_GPT305_Response(transcription.text)
 print("GPT 3.5 Turbo : " + gpt_response_text)
+
+speech_file_path = Path(__file__).parent / "tts_speech.mp3"
+with client.audio.speech.with_streaming_response.create(
+  model="tts-1",
+  voice="onyx",
+  input=gpt_response_text
+) as response:
+    response.stream_to_file(speech_file_path)
+
+def play_audio(audio_file):
+    # Initialize pygame
+    pygame.init()
+
+    # Load the audio file
+    pygame.mixer.music.load(audio_file)
+
+    # Play the audio file
+    pygame.mixer.music.play()
+
+    # Wait for the audio to finish playing
+    while pygame.mixer.music.get_busy():
+        pygame.time.Clock().tick(10)
+
+    # Quit pygame
+    pygame.quit()
+
+if __name__ == "__main__":
+    audio_file = "tts_speech.mp3"  # Replace this with the path to your audio file
+    play_audio(audio_file)
