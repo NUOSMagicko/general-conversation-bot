@@ -4,7 +4,7 @@ import keyboard
 import time
 
 FORMAT = pyaudio.paInt16
-CHANNELS = 1
+CHANNELS = 1.
 RATE = 44100
 CHUNK = 1024
 OUTPUT_FILENAME = "recordedFile.wav"

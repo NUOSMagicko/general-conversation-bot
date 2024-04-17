@@ -63,7 +63,7 @@ def get_GPT305_Response(prompt, api_key):
         messages=[
             {
                 "role" : "user",
-                "content" : "Answer shortly and thoughtfully to the following sentences." +   prompt,
+                "content" :  prompt,
             }
         ],
         response_format={"type" : "text"},
@@ -94,7 +94,7 @@ def generate_speech_from_text(text, audio_file_path, api_key):
     client = OpenAI(api_key=api_key)
     with client.audio.speech.with_streaming_response.create(
       model="tts-1",
-      voice="onyx",
+      voice="alloy",
       input=text
     ) as response:
         response.stream_to_file(audio_file_path)
